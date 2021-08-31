@@ -1,15 +1,20 @@
-const loadCountries = () => {
-    fetch('https://restcountries.eu/rest/v2/all')
-        .then(res => res.json())
-        .then(data => displayCountries(data))
+// Data load
+const loadCountries = async () => {
+    try {
+        const url = 'https://restcountries.eu/rest/v2/all';
+        const res = await fetch(url);
+        const data = await res.json(res);
+        displayCountries(data);
+    } catch (error) {
+        console.log('someting wrong...')
+    }
 }
 
 loadCountries();
 
+// Display data
 const displayCountries = countries => {
     const countriesContainer = document.getElementById('countries')
-
-    // console.log(countries)
 
     countries.forEach(country => {
         const div = document.createElement('div');
@@ -20,24 +25,25 @@ const displayCountries = countries => {
             <button onclick="loadByDetail('${country.name}')">Short Information</button>
             `;
 
-        countriesContainer.appendChild(div);
-        // console.log(country)
+        countriesContainer.appendChild(div)
     });
 }
 
-const loadByDetail = detail => {
-    const url = `https://restcountries.eu/rest/v2/name/${detail}`;
-    // console.log(url)
-
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayCountryDetail(data[0]))
+// data load
+const loadByDetail = async detail => {
+    try {
+        const url = `https://restcountries.eu/rest/v2/name/${detail}`;
+        const res = await fetch(url);
+        const data = await res.json(url);
+        displayCountryDetail(data[0]);
+    } catch (error) {
+        console.log('something wrong...')
+    }
 }
 
+// short data load as sticky
 const displayCountryDetail = countryDetail => {
-    // console.log(countryDetail)
-
-    const singleCountry = document.getElementById('country-detail')
+    const singleCountry = document.getElementById('country-detail');
     singleCountry.innerHTML = `
         <div>
             <h3>${countryDetail.name}</h3>
@@ -49,6 +55,7 @@ const displayCountryDetail = countryDetail => {
     `;
 }
 
+// preloader
 const loaded = () => {
     document.getElementById('loaded').style.display = "none"
 }
